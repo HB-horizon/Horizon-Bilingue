@@ -64,9 +64,6 @@ export function SoundsSection({ sounds, onNext }: SoundsSectionProps) {
                       <Text className="text-center" style={{ fontSize: 52, color: "#F1F5F9" }}>
                         {sound.arabic}
                       </Text>
-                      <Text className="text-sm mt-1" style={{ color: "#94A3B8" }}>
-                        ({sound.trans})
-                      </Text>
                     </View>
 
                     {/* Play button */}

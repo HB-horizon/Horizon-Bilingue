@@ -9,10 +9,22 @@ const HARAKAT_MARKS: Record<string, string> = {
 
 const audioCache = new Map<string, HTMLAudioElement>();
 
+function getWebBaseUrl(): string {
+  if (typeof document === 'undefined') return '';
+  const link = document.querySelector('link[rel="stylesheet"]');
+  if (link) {
+    const href = link.getAttribute('href') || '';
+    const match = href.match(/^(.+?)\/_expo\//);
+    if (match) return match[1];
+  }
+  return '';
+}
+
 function getLocalAudioUrl(text: string): string | null {
   const filename = (audioMapping as Record<string, string>)[text];
   if (!filename) return null;
-  return `/audio/${filename}`;
+  const base = Platform.OS === 'web' ? getWebBaseUrl() : '';
+  return `${base}/audio/${filename}`;
 }
 
 async function playLocalAudio(text: string): Promise<void> {
@@ -64,31 +76,33 @@ class AudioManager {
   async playLetterSound(letter: string, harakat: 'fatha' | 'damma' | 'kasra'): Promise<void> {
     const text = `${letter}${HARAKAT_MARKS[harakat]}`;
     try {
-      if (Platform.OS === 'web') {
-        await playLocalAudio(text);
-      } else {
-        await speakNative(text);
-      }
+      await speakNative(text);
     } catch (e) {
-      console.warn('[AudioManager] Primary speech failed:', e);
+      console.warn('[AudioManager] TTS failed, trying local audio:', e);
       try {
-        const { playLetterSound: synth } = await import('./audio-synthesizer');
-        await synth(letter, harakat);
+        await playLocalAudio(text);
       } catch (e2) {
-        console.warn('[AudioManager] All speech methods failed:', e2);
+        console.warn('[AudioManager] Local audio failed, trying synthesizer:', e2);
+        try {
+          const { playLetterSound: synth } = await import('./audio-synthesizer');
+          await synth(letter, harakat);
+        } catch (e3) {
+          console.warn('[AudioManager] All speech methods failed:', e3);
+        }
       }
     }
   }
 
   async playWordSound(word: string): Promise<void> {
     try {
-      if (Platform.OS === 'web') {
-        await playLocalAudio(word);
-      } else {
-        await speakNative(word);
-      }
+      await speakNative(word);
     } catch (e) {
-      console.warn('[AudioManager] Word speech failed:', e);
+      console.warn('[AudioManager] TTS failed, trying local audio:', e);
+      try {
+        await playLocalAudio(word);
+      } catch (e2) {
+        console.warn('[AudioManager] Word speech failed:', e2);
+      }
     }
   }
 
