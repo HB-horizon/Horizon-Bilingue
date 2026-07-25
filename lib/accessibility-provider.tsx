@@ -44,17 +44,6 @@ const AccessibilityContext = createContext<AccessibilityContextType>({
 export function AccessibilityProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<AccessibilitySettings>(DEFAULTS);
 
-  useEffect(() => {
-    AsyncStorage.getItem(ASYNC_KEY).then((json) => {
-      if (json) {
-        try {
-          const saved = JSON.parse(json) as Partial<AccessibilitySettings>;
-          setTimeout(() => setSettings((prev) => ({ ...prev, ...saved })), 0);
-        } catch {}
-      }
-    });
-  }, []);
-
   const applyCSS = useCallback((s: AccessibilitySettings) => {
     if (Platform.OS !== "web" || typeof document === "undefined") return;
     const root = document.documentElement;
