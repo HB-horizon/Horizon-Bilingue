@@ -22,14 +22,15 @@ import { AccessibilityProvider } from "@/lib/accessibility-provider";
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
+const WEB_METRICS = { insets: DEFAULT_WEB_INSETS, frame: DEFAULT_WEB_FRAME };
 
 export const unstable_settings = {
   anchor: "(tabs)",
 };
 
 export default function RootLayout() {
-  const initialInsets = initialWindowMetrics?.insets ?? DEFAULT_WEB_INSETS;
-  const initialFrame = initialWindowMetrics?.frame ?? DEFAULT_WEB_FRAME;
+  const initialInsets = DEFAULT_WEB_INSETS;
+  const initialFrame = DEFAULT_WEB_FRAME;
 
   const [insets, setInsets] = useState<EdgeInsets>(initialInsets);
   const [frame, setFrame] = useState<Rect>(initialFrame);
@@ -66,8 +67,13 @@ export default function RootLayout() {
   );
   const [trpcClient] = useState(() => createTRPCClient());
 
-  // Ensure minimum 8px padding for top and bottom on mobile
   const providerInitialMetrics = useMemo(() => {
+    if (Platform.OS === "web") {
+      return {
+        insets: { top: 16, right: 0, bottom: 12, left: 0 },
+        frame: { x: 0, y: 0, width: 0, height: 0 },
+      };
+    }
     const metrics = initialWindowMetrics ?? { insets: initialInsets, frame: initialFrame };
     return {
       ...metrics,
@@ -77,7 +83,7 @@ export default function RootLayout() {
         bottom: Math.max(metrics.insets.bottom, 12),
       },
     };
-  }, [initialInsets, initialFrame]);
+  }, []);
 
   const content = (
     <GestureHandlerRootView style={{ flex: 1 }}>
