@@ -103,7 +103,8 @@ const config: ExpoConfig = {
   ],
   experiments: {
     typedRoutes: true,
-    reactCompiler: true,
+    // reactCompiler disabled — causes hydration error #418 in production builds
+    // reactCompiler: true,
   },
 };
 
