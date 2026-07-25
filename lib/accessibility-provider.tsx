@@ -49,7 +49,7 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
       if (json) {
         try {
           const saved = JSON.parse(json) as Partial<AccessibilitySettings>;
-          setSettings((prev) => ({ ...prev, ...saved }));
+          setTimeout(() => setSettings((prev) => ({ ...prev, ...saved })), 0);
         } catch {}
       }
     });
@@ -72,14 +72,16 @@ export function AccessibilityProvider({ children }: { children: React.ReactNode 
   }, [settings, applyCSS]);
 
   const update = useCallback(async (partial: Partial<AccessibilitySettings>) => {
-    const next = { ...DEFAULTS, ...partial };
-    await AsyncStorage.setItem(ASYNC_KEY, JSON.stringify(next));
-    setSettings(next);
+    setSettings((prev) => {
+      const next = { ...prev, ...partial };
+      AsyncStorage.setItem(ASYNC_KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
   }, []);
 
   const reset = useCallback(async () => {
-    await AsyncStorage.setItem(ASYNC_KEY, JSON.stringify(DEFAULTS));
     setSettings(DEFAULTS);
+    AsyncStorage.setItem(ASYNC_KEY, JSON.stringify(DEFAULTS)).catch(() => {});
   }, []);
 
   const value = useMemo(() => ({ settings, update, reset }), [settings, update, reset]);
