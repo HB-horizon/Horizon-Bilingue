@@ -4,14 +4,16 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useEffect, useRef, useState } from "react";
 import { loadProgress } from "@/lib/progress-manager";
 
-const STARS = Array.from({ length: 40 }, (_, i) => ({
-  id: i,
-  left: `${(i * 37 + 13) % 100}%`,
-  top: `${(i * 53 + 7) % 100}%`,
-  size: 1 + (i % 3),
-  opacity: 0.2 + ((i * 17) % 80) / 100,
-  delay: (i * 120) % 2000,
-}));
+const STARS = Array.from({ length: 40 }, (_, i) =>
+  ({
+    id: i,
+    left: `${(i * 37 + 13) % 100}%`,
+    top: `${(i * 53 + 7) % 100}%`,
+    size: 1 + (i % 3),
+    opacity: 0.2 + ((i * 17) % 80) / 100,
+    delay: (i * 120) % 2000,
+  }) as const
+);
 
 export default function HomeScreen() {
   const router = useRouter();

@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ExerciseWord } from "@/types/lesson";
-import Animated, { FadeIn, SlideInUp } from "react-native-reanimated";
-import { useState } from "react";
+import Animated, { FadeIn, SlideInUp, BounceIn } from "react-native-reanimated";
+import { useState, useCallback } from "react";
 import { playWordSound } from "@/lib/audio-manager";
+import { ListenRepeatButton } from "@/components/common/listen-repeat-button";
 
 type ExerciseSectionProps = {
   words: ExerciseWord[];
@@ -11,13 +12,19 @@ type ExerciseSectionProps = {
 
 export function ExerciseSection({ words, onNext }: ExerciseSectionProps) {
   const [playedWords, setPlayedWords] = useState<Set<number>>(new Set());
+  const [speechResults, setSpeechResults] = useState<Record<number, boolean>>({});
 
   const handleWordPlay = async (index: number) => {
     await playWordSound(words[index].arabic);
     setPlayedWords((prev) => new Set(prev).add(index));
   };
 
+  const handleSpeechResult = useCallback((index: number, correct: boolean) => {
+    setSpeechResults((prev) => ({ ...prev, [index]: correct }));
+  }, []);
+
   const allPlayed = playedWords.size === words.length;
+  const correctCount = Object.values(speechResults).filter(Boolean).length;
 
   return (
     <Animated.View entering={FadeIn.duration(500)} className="flex-1 px-6 pt-6">
@@ -35,6 +42,7 @@ export function ExerciseSection({ words, onNext }: ExerciseSectionProps) {
         <View className="gap-2.5 mb-6">
           {words.map((word, index) => {
             const played = playedWords.has(index);
+            const speechResult = speechResults[index];
             return (
               <Animated.View
                 key={index}
@@ -47,7 +55,7 @@ export function ExerciseSection({ words, onNext }: ExerciseSectionProps) {
                   style={{
                     backgroundColor: "#1E293B",
                     borderWidth: 2,
-                    borderColor: played ? "#10B981" : "#334155",
+                    borderColor: speechResult === true ? "#10B981" : speechResult === false ? "#EF4444" : played ? "#334155" : "#334155",
                   }}
                 >
                   <View className="flex-row items-center">
@@ -66,11 +74,22 @@ export function ExerciseSection({ words, onNext }: ExerciseSectionProps) {
 
                     <View
                       className="w-11 h-11 rounded-full items-center justify-center"
-                      style={{ backgroundColor: played ? "#10B981" : "#FF6B6B" }}
+                      style={{ backgroundColor: speechResult === true ? "#10B981" : speechResult === false ? "#EF4444" : played ? "#FF6B6B" : "#FF6B6B" }}
                     >
-                      <Text className="text-lg">{played ? "✓" : "🔊"}</Text>
+                      <Text className="text-lg">
+                        {speechResult === true ? "✓" : speechResult === false ? "✗" : "🔊"}
+                      </Text>
                     </View>
                   </View>
+
+                  {played ? (
+                    <Animated.View entering={BounceIn.springify()} className="mt-3">
+                      <ListenRepeatButton
+                        expectedText={word.arabic}
+                        onResult={(correct) => handleSpeechResult(index, correct)}
+                      />
+                    </Animated.View>
+                  ) : null}
                 </TouchableOpacity>
               </Animated.View>
             );
@@ -81,14 +100,14 @@ export function ExerciseSection({ words, onNext }: ExerciseSectionProps) {
         <View
           className="rounded-2xl p-4"
           style={{
-            backgroundColor: allPlayed ? "#064E3B" : "#78350F",
+            backgroundColor: "transparent",
             borderWidth: 1,
-            borderColor: allPlayed ? "#10B981" : "#F59E0B",
+            borderColor: "#334155",
           }}
         >
-          <Text className="text-sm text-center font-semibold" style={{ color: allPlayed ? "#6EE7B7" : "#FDE68A" }}>
+          <Text className="text-sm text-center font-semibold" style={{ color: "#94A3B8" }}>
             {allPlayed
-              ? "🎉 Excellent ! Tous les mots sont pratiqués !"
+              ? `✅ ${correctCount}/${words.length} mots prononcés correctement`
               : `🔊 Écoute les ${words.length} mots pour continuer`}
           </Text>
         </View>

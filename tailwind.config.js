@@ -22,6 +22,15 @@ module.exports = {
   theme: {
     extend: {
       colors: tailwindColors,
+      fontFamily: {
+        dyslexic: ['Lexend', 'system-ui', 'sans-serif'],
+        atkinson: ['Atkinson Hyperlegible', 'system-ui', 'sans-serif'],
+        arabic: ['Noto Naskh Arabic', 'Traditional Arabic', 'Arial', 'sans-serif'],
+      },
+      letterSpacing: {
+        wide: '0.05em',
+        wider: '0.1em',
+      },
     },
   },
   plugins: [

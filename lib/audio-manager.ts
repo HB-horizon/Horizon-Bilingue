@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import audioMapping from './audio-mapping.json';
 
 const HARAKAT_MARKS: Record<string, string> = {
@@ -7,24 +6,27 @@ const HARAKAT_MARKS: Record<string, string> = {
   kasra: '\u0650',
 };
 
+const SUKOON = '\u0652';
+
 const audioCache = new Map<string, HTMLAudioElement>();
+let speechModule: any = null;
 
 function getWebBaseUrl(): string {
-  if (typeof document === 'undefined') return '';
-  const link = document.querySelector('link[rel="stylesheet"]');
-  if (link) {
-    const href = link.getAttribute('href') || '';
-    const match = href.match(/^(.+?)\/_expo\//);
-    if (match) return match[1];
+  if (typeof window === 'undefined') return '';
+  return window.location.origin;
+}
+
+async function getSpeechModule() {
+  if (!speechModule) {
+    speechModule = await import('expo-speech');
   }
-  return '';
+  return speechModule;
 }
 
 function getLocalAudioUrl(text: string): string | null {
   const filename = (audioMapping as Record<string, string>)[text];
   if (!filename) return null;
-  const base = Platform.OS === 'web' ? getWebBaseUrl() : '';
-  return `${base}/audio/${filename}`;
+  return `${getWebBaseUrl()}/audio/${filename}`;
 }
 
 async function playLocalAudio(text: string): Promise<void> {
@@ -35,39 +37,33 @@ async function playLocalAudio(text: string): Promise<void> {
     const cached = audioCache.get(text)!;
     cached.currentTime = 0;
     return new Promise<void>((resolve, reject) => {
-      cached.onended = () => resolve();
-      cached.onerror = () => {
-        audioCache.delete(text);
-        reject(new Error('Audio playback failed'));
-      };
-      cached.play().catch(reject);
+      let settled = false;
+      cached.onended = () => { if (!settled) { settled = true; resolve(); } };
+      cached.onerror = () => { if (!settled) { settled = true; audioCache.delete(text); reject(new Error('Audio playback failed')); } };
+      cached.play().catch((e) => { if (!settled) { settled = true; reject(e); } });
     });
   }
 
-  console.log('[AudioManager] Playing local audio:', url);
   const audio = new Audio(url);
   audioCache.set(text, audio);
 
   return new Promise<void>((resolve, reject) => {
-    audio.onended = () => resolve();
-    audio.onerror = (e) => {
-      console.warn('[AudioManager] Local audio error:', e);
-      audioCache.delete(text);
-      reject(new Error('Local audio playback failed'));
-    };
-    audio.play().catch(reject);
+    let settled = false;
+    audio.onended = () => { if (!settled) { settled = true; resolve(); } };
+    audio.onerror = () => { if (!settled) { settled = true; audioCache.delete(text); reject(new Error('Local audio playback failed')); } };
+    audio.play().catch((e) => { if (!settled) { settled = true; reject(e); } });
   });
 }
 
-async function speakNative(text: string): Promise<void> {
-  const Speech = await import('expo-speech');
+async function speakTTS(text: string): Promise<void> {
+  const Speech = await getSpeechModule();
   return new Promise((resolve, reject) => {
     Speech.speak(text, {
       language: 'ar',
       pitch: 1.0,
       rate: 0.75,
       onDone: () => resolve(),
-      onError: (e) => reject(e),
+      onError: (e: any) => reject(e),
     });
   });
 }
@@ -76,54 +72,64 @@ class AudioManager {
   async playLetterSound(letter: string, harakat: 'fatha' | 'damma' | 'kasra'): Promise<void> {
     const text = `${letter}${HARAKAT_MARKS[harakat]}`;
     try {
-      await speakNative(text);
+      await speakTTS(text);
     } catch (e) {
       console.warn('[AudioManager] TTS failed, trying local audio:', e);
       try {
         await playLocalAudio(text);
       } catch (e2) {
-        console.warn('[AudioManager] Local audio failed, trying synthesizer:', e2);
-        try {
-          const { playLetterSound: synth } = await import('./audio-synthesizer');
-          await synth(letter, harakat);
-        } catch (e3) {
-          console.warn('[AudioManager] All speech methods failed:', e3);
-        }
+        console.warn('[AudioManager] Local audio also failed:', e2);
+      }
+    }
+  }
+
+  async playDecomposedLetterSound(letter: string, harakat: 'fatha' | 'damma' | 'kasra'): Promise<void> {
+    const isolated = `${letter}${SUKOON}`;
+    const localUrl = getLocalAudioUrl(isolated);
+
+    if (localUrl) {
+      try {
+        await playLocalAudio(isolated);
+        await new Promise((r) => setTimeout(r, 200));
+      } catch {
+        await this.speakDecomposedFallback(letter);
+      }
+    } else {
+      await this.speakDecomposedFallback(letter);
+    }
+
+    await this.playLetterSound(letter, harakat);
+  }
+
+  private async speakDecomposedFallback(letter: string): Promise<void> {
+    try {
+      await speakTTS(`${letter}${SUKOON}`);
+      await new Promise((r) => setTimeout(r, 200));
+    } catch {
+      try {
+        await speakTTS(letter);
+        await new Promise((r) => setTimeout(r, 200));
+      } catch (e) {
+        console.warn('[AudioManager] Decomposed speech fallback also failed:', e);
       }
     }
   }
 
   async playWordSound(word: string): Promise<void> {
-    try {
-      await speakNative(word);
-    } catch (e) {
-      console.warn('[AudioManager] TTS failed, trying local audio:', e);
+    const localUrl = getLocalAudioUrl(word);
+    if (localUrl) {
       try {
         await playLocalAudio(word);
-      } catch (e2) {
-        console.warn('[AudioManager] Word speech failed:', e2);
+        return;
+      } catch (e) {
+        console.warn('[AudioManager] Local audio failed for word:', e);
       }
     }
-  }
-
-  async playFeedbackSound(type: 'success' | 'error' | 'click' | 'celebration'): Promise<void> {
-    if (Platform.OS !== 'web') return;
-    const { audioSynthesizer } = await import('./audio-synthesizer');
-    switch (type) {
-      case 'success': case 'celebration':
-        await audioSynthesizer.playSuccessSound();
-        break;
-      case 'error':
-        await audioSynthesizer.playErrorSound();
-        break;
-      case 'click':
-        await audioSynthesizer.playClickSound();
-        break;
+    try {
+      await speakTTS(word);
+    } catch (e) {
+      console.warn('[AudioManager] Word TTS also failed:', e);
     }
-  }
-
-  async playCelebrationSound(): Promise<void> {
-    await this.playFeedbackSound('celebration');
   }
 }
 
@@ -137,10 +143,10 @@ export async function playLetterSound(letter: string, harakat: 'fatha' | 'damma'
   await audioManager.playLetterSound(letter, harakat);
 }
 
-export async function playWordSound(word: string) {
-  await audioManager.playWordSound(word);
+export async function playDecomposedLetterSound(letter: string, harakat: 'fatha' | 'damma' | 'kasra') {
+  await audioManager.playDecomposedLetterSound(letter, harakat);
 }
 
-export async function playCelebrationSound() {
-  await audioManager.playCelebrationSound();
+export async function playWordSound(word: string) {
+  await audioManager.playWordSound(word);
 }

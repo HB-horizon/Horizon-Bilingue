@@ -5,6 +5,7 @@ import { LetterPresentation } from '@/components/lesson/letter-presentation';
 import { SoundsSection } from '@/components/lesson/sounds-section';
 import { ReadingRulesSection } from '@/components/lesson/reading-rules-section';
 import { FormsSection } from '@/components/lesson/forms-section';
+import { WritingSection } from '@/components/lesson/writing-section';
 import { ExerciseSection } from '@/components/lesson/exercise-section';
 import { CelebrationScreen } from '@/components/lesson/celebration-screen';
 import { useProgress } from '@/hooks/use-progress';
@@ -12,6 +13,7 @@ import { getLessonByDay } from '@/data/all-lessons';
 import { useState, useEffect, useRef } from 'react';
 import { LessonStep } from '@/types/lesson';
 import { ScrollView, Text } from 'react-native';
+import { addItemsToSRS, createSRSItem } from '@/lib/srs-manager';
 
 /**
  * Écran de leçon - Orchestrateur de toutes les sections
@@ -108,6 +110,9 @@ export default function LessonScreen() {
         setCurrentStep('forms');
         break;
       case 'forms':
+        setCurrentStep('writing');
+        break;
+      case 'writing':
         setCurrentStep('exercises');
         break;
       case 'exercises':
@@ -120,10 +125,14 @@ export default function LessonScreen() {
   };
   
   const handleFinish = async () => {
-    // Marquer le jour comme complété
+    if (lesson) {
+      const items = [
+        createSRSItem('letter', lesson.letter, lesson.latinName),
+        ...lesson.exerciseWords.map((w) => createSRSItem('word', w.arabic, w.latin)),
+      ];
+      await addItemsToSRS(items);
+    }
     await completeDay(dayNumber);
-    
-    // Retourner au dashboard
     router.replace('/dashboard');
   };
   
@@ -168,6 +177,14 @@ export default function LessonScreen() {
         {currentStep === 'forms' && (
           <FormsSection
             forms={lesson.forms}
+            onNext={handleNext}
+          />
+        )}
+
+        {currentStep === 'writing' && (
+          <WritingSection
+            letter={lesson.letter}
+            latinName={lesson.latinName}
             onNext={handleNext}
           />
         )}

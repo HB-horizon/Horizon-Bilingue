@@ -1,43 +1,15 @@
 import { View, type ViewProps } from "react-native";
 import { SafeAreaView, type Edge } from "react-native-safe-area-context";
-
+import { useAccessibility } from "@/lib/accessibility-provider";
 import { cn } from "@/lib/utils";
 
 export interface ScreenContainerProps extends ViewProps {
-  /**
-   * SafeArea edges to apply. Defaults to all edges.
-   * Pass a subset if you need specific edges only (e.g. tab screens).
-   */
   edges?: Edge[];
-  /**
-   * Tailwind className for the content area.
-   */
   className?: string;
-  /**
-   * Additional className for the outer container (background layer).
-   */
   containerClassName?: string;
-  /**
-   * Additional className for the SafeAreaView (content layer).
-   */
   safeAreaClassName?: string;
 }
 
-/**
- * A container component that properly handles SafeArea and background colors.
- *
- * The outer View extends to full screen (including status bar area) with the background color,
- * while the inner SafeAreaView ensures content is within safe bounds.
- *
- * Usage:
- * ```tsx
- * <ScreenContainer className="p-4">
- *   <Text className="text-2xl font-bold text-foreground">
- *     Welcome
- *   </Text>
- * </ScreenContainer>
- * ```
- */
 export function ScreenContainer({
   children,
   edges = ["top", "left", "right"],
@@ -47,6 +19,24 @@ export function ScreenContainer({
   style,
   ...props
 }: ScreenContainerProps) {
+  const { settings } = useAccessibility();
+
+  const fontFamily = settings.fontFamily === "lexend"
+    ? "Lexend, system-ui, -apple-system, sans-serif"
+    : settings.fontFamily === "atkinson"
+      ? "Atkinson Hyperlegible, system-ui, -apple-system, sans-serif"
+      : undefined;
+
+  const letterSpacing = settings.letterSpacing === "wide" ? 0.5
+    : settings.letterSpacing === "wider" ? 1
+      : undefined;
+
+  const lineHeight = settings.lineHeight === "relaxed" ? 26
+    : settings.lineHeight === "loose" ? 30
+      : undefined;
+
+  const fontSize = settings.largeText ? 18 : undefined;
+
   return (
     <View
       className={cn(
@@ -59,7 +49,13 @@ export function ScreenContainer({
       <SafeAreaView
         edges={edges}
         className={cn("flex-1", safeAreaClassName)}
-        style={style}
+        style={[
+          style,
+          fontFamily ? { fontFamily } as any : undefined,
+          letterSpacing ? { letterSpacing } as any : undefined,
+          lineHeight ? { lineHeight } as any : undefined,
+          fontSize ? { fontSize } as any : undefined,
+        ].filter(Boolean)}
       >
         <View className={cn("flex-1", className)}>{children}</View>
       </SafeAreaView>

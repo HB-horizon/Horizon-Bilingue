@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ReadingRule } from "@/types/lesson";
 import Animated, { FadeIn, SlideInRight } from "react-native-reanimated";
 import { useState } from "react";
-import { playRuleSound } from "@/lib/audio-synthesizer";
 import { playWordSound } from "@/lib/audio-manager";
 
 type ReadingRulesSectionProps = {
@@ -11,17 +10,7 @@ type ReadingRulesSectionProps = {
 };
 
 export function ReadingRulesSection({ rules, onNext }: ReadingRulesSectionProps) {
-  const [playedRules, setPlayedRules] = useState<Set<number>>(new Set());
   const [playingExample, setPlayingExample] = useState<number | null>(null);
-
-  const handleRuleAudioPlay = async (index: number) => {
-    try {
-      await playRuleSound(rules[index].name);
-      setPlayedRules((prev) => new Set(prev).add(index));
-    } catch (err) {
-      console.error("Erreur son:", err);
-    }
-  };
 
   const handleExampleSpeak = async (index: number) => {
     if (!rules[index].example || playingExample !== null) return;
@@ -34,8 +23,6 @@ export function ReadingRulesSection({ rules, onNext }: ReadingRulesSectionProps)
     setPlayingExample(null);
   };
 
-  const allPlayed = playedRules.size === rules.length;
-
   return (
     <Animated.View entering={FadeIn.duration(500)} className="flex-1 px-6 pt-6">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
@@ -43,7 +30,7 @@ export function ReadingRulesSection({ rules, onNext }: ReadingRulesSectionProps)
           Règles de Lecture
         </Text>
         <Text className="text-xl font-extrabold text-center mb-1" style={{ color: "#F1F5F9" }}>
-          Les Madd (Prolongations)
+          {rules.length === 1 ? rules[0].name : 'Les Règles de Lecture'}
         </Text>
         <Text className="text-xs text-center mb-6" style={{ color: "#94A3B8" }}>
           Écoute chaque règle et son exemple
@@ -51,7 +38,6 @@ export function ReadingRulesSection({ rules, onNext }: ReadingRulesSectionProps)
 
         <View className="gap-3 mb-6">
           {rules.map((rule, index) => {
-            const played = playedRules.has(index);
             return (
               <Animated.View
                 key={index}
@@ -62,23 +48,13 @@ export function ReadingRulesSection({ rules, onNext }: ReadingRulesSectionProps)
                   style={{
                     backgroundColor: "#1E293B",
                     borderWidth: 2,
-                    borderColor: played ? "#10B981" : "#334155",
+                    borderColor: "#334155",
                   }}
                 >
                   {/* Header */}
-                  <View className="flex-row items-center justify-between mb-3">
-                    <Text className="text-base font-bold flex-1" style={{ color: "#F1F5F9" }}>
-                      {rule.name}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => handleRuleAudioPlay(index)}
-                      activeOpacity={0.7}
-                      className="w-10 h-10 rounded-full items-center justify-center"
-                      style={{ backgroundColor: played ? "#10B981" : "#6366F1" }}
-                    >
-                      <Text className="text-lg">{played ? "✓" : "🎵"}</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <Text className="text-base font-bold mb-3" style={{ color: "#F1F5F9" }}>
+                    {rule.name}
+                  </Text>
 
                   {/* Description */}
                   <Text className="text-xs leading-5 mb-3" style={{ color: "#94A3B8" }}>
@@ -116,32 +92,16 @@ export function ReadingRulesSection({ rules, onNext }: ReadingRulesSectionProps)
           })}
         </View>
 
-        {/* Status */}
-        <View
-          className="rounded-2xl p-4"
-          style={{
-            backgroundColor: allPlayed ? "#064E3B" : "#78350F",
-            borderWidth: 1,
-            borderColor: allPlayed ? "#10B981" : "#F59E0B",
-          }}
-        >
-          <Text className="text-sm text-center font-semibold" style={{ color: allPlayed ? "#6EE7B7" : "#FDE68A" }}>
-            {allPlayed
-              ? "🎉 Excellent ! Toutes les règles sont maîtrisées !"
-              : `🎵 Écoute les ${rules.length} règles pour continuer`}
-          </Text>
-        </View>
       </ScrollView>
 
       {/* Next */}
       <TouchableOpacity
         onPress={onNext}
-        disabled={!allPlayed}
         activeOpacity={0.85}
         className="py-4 rounded-2xl mb-8 mt-4"
-        style={{ backgroundColor: allPlayed ? "#FF6B6B" : "#334155" }}
+        style={{ backgroundColor: "#FF6B6B" }}
       >
-        <Text className="text-base font-bold text-center" style={{ color: allPlayed ? "#fff" : "#64748B" }}>
+        <Text className="text-base font-bold text-center text-white">
           Suivant →
         </Text>
       </TouchableOpacity>

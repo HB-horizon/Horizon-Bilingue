@@ -32,6 +32,15 @@ export const day1Lesson: DayLesson = {
     { arabic: 'بِ', trans: 'bi' },
   ],
   
+  readingRules: [
+    {
+      name: 'Le Soukoun',
+      description: 'L\'absence de voyelle — une lettre sans voyelle se prononce en bloquant le son',
+      example: 'بْ',
+      explanation: 'Quand une lettre a un petit cercle au-dessus (ْ), on ne met pas de voyelle après. On bloque le son : "b" (et non "ba", "bou" ou "bi"). Comme dans بْت : "bt" et non "bata".',
+    },
+  ],
+  
   exerciseWords: [
     { arabic: 'بَبَ', latin: 'baba', image: '👨' },
     { arabic: 'بِبِ', latin: 'bibi', image: '👶' },
@@ -67,6 +76,15 @@ export const day2Lesson: DayLesson = {
     { arabic: 'تَ', trans: 'ta' },
     { arabic: 'تُ', trans: 'tou' },
     { arabic: 'تِ', trans: 'ti' },
+  ],
+  
+  readingRules: [
+    {
+      name: 'Le Tanwin',
+      description: 'Le double-voyelle — quand on ajoute un "n" à la fin d\'un mot',
+      example: 'تَتًا',
+      explanation: 'Le tanwin, c\'est quand on double la voyelle à la fin d\'un mot : ً (tanwin fat7a → "an"), ٌ (tanwin damma → "oun"), ٍ (tanwin kasra → "in"). Exemple : تَتًا se lit "tatan". C\'est comme ajouter un petit "n" à la fin !',
+    },
   ],
   
   exerciseWords: [
@@ -161,6 +179,15 @@ export const day4Lesson: DayLesson = {
     { arabic: 'نَ', trans: 'na' },
     { arabic: 'نُ', trans: 'nou' },
     { arabic: 'نِ', trans: 'ni' },
+  ],
+  
+  readingRules: [
+    {
+      name: 'La Chadda',
+      description: 'Le redoublement — quand une lettre est doublée, on insiste deux fois plus !',
+      example: 'نَّ',
+      explanation: 'La chadda (ّ) est un petit "w" au-dessus d\'une lettre. Elle dit qu\'on doit prononcer la lettre deux fois : une fois sans voyelle, une fois avec la voyelle. نَّ se lit "n-na" : le premier "n" est coupé, le deuxième "na" est prononcé. C\'est comme si la lettre sautillait !',
+    },
   ],
   
   hasElongation: true,

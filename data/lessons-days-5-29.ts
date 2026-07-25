@@ -33,6 +33,14 @@ export const day5Lesson: DayLesson = {
     { arabic: 'يُويِيَا', trans: 'youwiaa', type: 'Combiné' },
     { arabic: 'يِييَا', trans: 'yiiyaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Les 3 Lettres de Prolongation',
+      description: 'Alif (ا), Waw (و) et Ya (ي) peuvent allonger le son de la voyelle précédente',
+      example: 'يَا',
+      explanation: 'En arabe, trois lettres servent à allonger les sons : ا (alif) allonge le "a", و (waw) allonge le "ou", ي (ya) allonge le "i". Dans يَا (yaa), le alif allonge le "a" : on lit "yaa" et non "ya". Ces lettres de prolongation sont toujours sans voyelle (soukoun).',
+    },
+  ],
   exerciseWords: [
     { arabic: 'يَدٌ', latin: 'yad', image: '✋' },
     { arabic: 'بَيْتٌ', latin: 'bayt', image: '🏠' },
@@ -71,6 +79,14 @@ export const day6Lesson: DayLesson = {
     { arabic: 'مَامِي', trans: 'maami', type: 'Combiné' },
     { arabic: 'مُومِيَا', trans: 'moumiaa', type: 'Combiné' },
     { arabic: 'مِيمَا', trans: 'miimaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'La Fermeture des Lèvres',
+      description: 'Le mîm (م) se prononce en fermant les lèvres — comme quand on dit "miam" !',
+      example: 'مَاءٌ',
+      explanation: 'La lettre م (mîm) est la seule lettre arabe qui se prononce en fermant complètement les lèvres. Regarde-toi dans un miroir : pour dire "ma", tes lèvres se ferment au début. Essaie avec مَاءٌ (maa) : sens tes lèvres qui se touchent !',
+    },
   ],
   exerciseWords: [
     { arabic: 'مَاءٌ', latin: 'maa', image: '💧' },
@@ -111,6 +127,14 @@ export const day7Lesson: DayLesson = {
     { arabic: 'شُوشِيَا', trans: 'shoushiaa', type: 'Combiné' },
     { arabic: 'شِيشَا', trans: 'shiishaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Les Lettres Solaires',
+      description: 'Quand "Al" (ال) rencontre ش, on ne prononce pas le "l" — on double la lettre !',
+      example: 'الشَّمْسُ',
+      explanation: 'En arabe, il y a des lettres "solaires" comme ش (shîn). Quand on met "ال" (al) devant elles, on ne prononce pas le "l" — on double la première lettre. الشَّمْسُ se lit "ach-chams" et non "al-chams". Les lettres solaires sont : ت ث د ذ ر ز س ش ص ض ط ظ ل ن.',
+    },
+  ],
   exerciseWords: [
     { arabic: 'شَمْسٌ', latin: 'shams', image: '☀️' },
     { arabic: 'شِيْمَةٌ', latin: 'shima', image: '✨' },
@@ -150,6 +174,14 @@ export const day8Lesson: DayLesson = {
     { arabic: 'جُوجِيَا', trans: 'joujiaa', type: 'Combiné' },
     { arabic: 'جِيجَا', trans: 'jiijaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Les Lettres Lunaires',
+      description: 'Quand "Al" (ال) rencontre ج, on prononce le "l" normalement',
+      example: 'الْجَمَلُ',
+      explanation: 'Les lettres "lunaires" sont l\'inverse des lettres solaires. Quand "ال" est devant ج (jîm), on prononce le "l" : الْجَمَلُ se lit "al-jamal". Les lettres lunaires sont : أ ب ج ح خ ع غ ف ق ك م ه و ي.',
+    },
+  ],
   exerciseWords: [
     { arabic: 'جَمَلٌ', latin: 'jamal', image: '🐪' },
     { arabic: 'جَنْبٌ', latin: 'janb', image: '🦴' },
@@ -188,6 +220,14 @@ export const day9Lesson: DayLesson = {
     { arabic: 'حَاحِي', trans: 'haahii', type: 'Combiné' },
     { arabic: 'حُوحِيَا', trans: 'houhiaa', type: 'Combiné' },
     { arabic: 'حِيحَا', trans: 'hiihaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Les Lettres de la Gorge',
+      description: 'Certaines lettres arabes se prononcent dans la gorge — comme ح et خ !',
+      example: 'حَمَارٌ',
+      explanation: 'Six lettres arabes viennent de la gorge (الحروف الحلقية) : ء (hamza), ه (ha), ع (ayn), ح (ha), غ (ghayn), خ (kha). Pour ح (ha), serre la gorge comme si tu souffles sur des lunettes pour les nettoyer !',
+    },
   ],
   exerciseWords: [
     { arabic: 'حِمَارٌ', latin: 'himar', image: '🐴' },
@@ -276,6 +316,14 @@ export const day11Lesson: DayLesson = {
     { arabic: 'سُوسِيَا', trans: 'sousiaa', type: 'Combiné' },
     { arabic: 'سِيسَا', trans: 'siisaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Le Soukoun et la Lecture Rapide',
+      description: 'Quand une lettre a un soukoun (ْ), on enchaîne vite vers la lettre suivante',
+      example: 'سَمْكٌ',
+      explanation: 'Le soukoun (ْ) sur س dans سَمْكٌ veut dire que le "s" n\'a pas de voyelle. On le prononce vite et on enchaîne sur la lettre suivante : "sam-koun" et non "sama-koun". C\'est comme une consonne en français !',
+    },
+  ],
   exerciseWords: [
     { arabic: 'سَمَكٌ', latin: 'samak', image: '🐠' },
     { arabic: 'سِيَاسَةٌ', latin: 'siasa', image: '🏛️' },
@@ -314,6 +362,14 @@ export const day12Lesson: DayLesson = {
     { arabic: 'صَاصِي', trans: 'saasii', type: 'Combiné' },
     { arabic: 'صُوصِيَا', trans: 'sousiaa', type: 'Combiné' },
     { arabic: 'صِيصَا', trans: 'siisaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Les Lettres Emphatiques',
+      description: 'Les lettres "lourdes" — on les prononce en gonflant la bouche',
+      example: 'صُورَةٌ',
+      explanation: 'Quatre lettres arabes sont "emphatiques" : ص (sad), ض (dad), ط (ta), ظ (za). On les prononce en gonflant la bouche et en baissant la langue. Compare س (normal) et ص (emphatique) : صُورَةٌ se lit "Sourah" avec un "S" lourd et profond.',
+    },
   ],
   exerciseWords: [
     { arabic: 'صُورَةٌ', latin: 'surah', image: '📷' },
@@ -354,6 +410,14 @@ export const day13Lesson: DayLesson = {
     { arabic: 'ضُوضِيَا', trans: 'doudiaa', type: 'Combiné' },
     { arabic: 'ضِيضَا', trans: 'diidaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'La Lettre du Dhad',
+      description: 'ض est la lettre la plus spéciale de l\'arabe — elle n\'existe dans aucune autre langue !',
+      example: 'ضِفْدَعٌ',
+      explanation: 'La lettre ض (dad) est unique à la langue arabe. On l\'appelle "la lettre du Dhad" (لغة الضاد). Pour la prononcer, mets le côté de ta langue contre les molaires du haut et pousse le son. Compare avec د (dal) : ض est plus lourd et plus profond.',
+    },
+  ],
   exerciseWords: [
     { arabic: 'ضِفْدَعٌ', latin: 'difdaa', image: '🐸' },
     { arabic: 'ضُرُوسٌ', latin: 'duros', image: '🦷' },
@@ -392,6 +456,14 @@ export const day14Lesson: DayLesson = {
     { arabic: 'طَاطِي', trans: 'taatii', type: 'Combiné' },
     { arabic: 'طُوطِيَا', trans: 'toutiaa', type: 'Combiné' },
     { arabic: 'طِيطَا', trans: 'tiitaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Le Ta Emphatique',
+      description: 'Différence entre ت (ta doux) et ط (ta emphatique)',
+      example: 'طَعَامٌ',
+      explanation: 'ت (ta) et ط (ta emphatique) se ressemblent mais se prononcent différemment. Pour ت, la langue touche les dents du haut doucement. Pour ط, la langue est plus large et la bouche est gonflée. Compare : تَمْرٌ (tamr, datte) vs طَعَامٌ (taam, nourriture).',
+    },
   ],
   exerciseWords: [
     { arabic: 'طَعَامٌ', latin: 'taam', image: '🍽️' },
@@ -479,6 +551,14 @@ export const day16Lesson: DayLesson = {
     { arabic: 'عُوعِيَا', trans: 'ouiaa', type: 'Combiné' },
     { arabic: 'عِيعَا', trans: 'iiaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Ayn, la Lettre Profonde',
+      description: 'La lettre ع (ayn) vient du fond de la gorge — elle est unique et magnifique !',
+      example: 'عَيْنٌ',
+      explanation: 'La lettre ع (ayn) est l\'une des lettres les plus profondes. Pour la prononcer, serre le fond de ta gorge comme si tu allais boire de l\'eau. عَيْنٌ signifie "œil" en arabe. Essaie de dire "aa" en serrant la gorge : tu obtiendras le son de ع !',
+    },
+  ],
   exerciseWords: [
     { arabic: 'عَيْنٌ', latin: 'ayn', image: '👁️' },
     { arabic: 'عِلْمٌ', latin: 'ilm', image: '📚' },
@@ -517,6 +597,14 @@ export const day17Lesson: DayLesson = {
     { arabic: 'غَاغِي', trans: 'ghaghii', type: 'Combiné' },
     { arabic: 'غُوغِيَا', trans: 'ghougiaa', type: 'Combiné' },
     { arabic: 'غِيغَا', trans: 'ghiighaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Ghayn et les Sons de la Gorge',
+      description: 'غ (ghayn) est le "r" français qu\'on fait avec la gorge — comme quand tu gargarises !',
+      example: 'غَيْمٌ',
+      explanation: 'غ (ghayn) ressemble au "r" français prononcé avec la gorge. Pour la prononcer, fais comme si tu faisais un gargarisme d\'eau. غَيْمٌ signifie "nuage". Essaie : "ghayim" — tu sens les vibrations dans ta gorge ? Maintenant essaie de faire la différence entre غ et ع.',
+    },
   ],
   exerciseWords: [
     { arabic: 'غَيْمٌ', latin: 'ghayim', image: '☁️' },
@@ -557,6 +645,14 @@ export const day18Lesson: DayLesson = {
     { arabic: 'فُوفِيَا', trans: 'foufiaa', type: 'Combiné' },
     { arabic: 'فِيفَا', trans: 'fiifaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Les Lettres Labiales',
+      description: 'Les lettres qui se prononcent avec les lèvres — ف (fa), م (mim), ب (ba) et و (waw)',
+      example: 'فِيلٌ',
+      explanation: 'Quatre lettres arabes sont dites "labiales" : elles se prononcent avec les lèvres. ف (fa) : la lèvre inférieure touche les dents du haut. Pour فِيلٌ (fil, éléphant), sens ta lèvre qui touche tes dents. م (mim) et ب (ba) ferment les lèvres. و (waw) arrondit les lèvres.',
+    },
+  ],
   exerciseWords: [
     { arabic: 'فِيلٌ', latin: 'fil', image: '🐘' },
     { arabic: 'فِئَةٌ', latin: 'fiya', image: '👥' },
@@ -595,6 +691,14 @@ export const day19Lesson: DayLesson = {
     { arabic: 'قَاقِي', trans: 'qaaqii', type: 'Combiné' },
     { arabic: 'قُوقِيَا', trans: 'quuqiaa', type: 'Combiné' },
     { arabic: 'قِيقَا', trans: 'qiiqaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Qaf, la Lettre du Fond de la Bouche',
+      description: 'ق (qaf) se prononce tout au fond de la bouche — bien plus profond que ك (kaf)',
+      example: 'قَمَرٌ',
+      explanation: 'ق (qaf) et ك (kaf) sont deux lettres qui se ressemblent mais ق est plus profonde. Pour ق, la langue touche le fond du palais (la luette). Pour ك, elle touche le milieu du palais. Compare : قَلْبٌ (qalb, cœur) vs كَلْبٌ (kalb, chien). La différence change tout le sens !',
+    },
   ],
   exerciseWords: [
     { arabic: 'قَمَرٌ', latin: 'qamar', image: '🌙' },
@@ -683,6 +787,14 @@ export const day21Lesson: DayLesson = {
     { arabic: 'لُولِيَا', trans: 'louliaa', type: 'Combiné' },
     { arabic: 'لِيلَا', trans: 'liilaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Le Lam du Mot Allah',
+      description: 'Dans le mot Allah (الله), le ل (lam) se prononce d\'une manière spéciale',
+      example: 'اللَّهُ',
+      explanation: 'Le mot الله (Allah) a une règle spéciale : quand le ل (lam) est précédé d\'un "a" (fat7a) ou d\'un "ou" (damma), on le prononce épais (lourd). Mais s\'il est précédé d\'un "i" (kasra), on le prononce fin (léger). Par exemple : "Bismillah" — le lam est fin après le "i".',
+    },
+  ],
   exerciseWords: [
     { arabic: 'لِسَانٌ', latin: 'lisan', image: '👅' },
     { arabic: 'لَيْلٌ', latin: 'layl', image: '🌙' },
@@ -721,6 +833,14 @@ export const day22Lesson: DayLesson = {
     { arabic: 'هَاهِي', trans: 'haahii', type: 'Combiné' },
     { arabic: 'هُوهِيَا', trans: 'houhiaa', type: 'Combiné' },
     { arabic: 'هِيهَا', trans: 'hiihaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Ha et Ta Marbuta',
+      description: 'À la fin d\'un mot, ه (ha) et ة (ta marbuta) peuvent se ressembler mais sont différentes',
+      example: 'هِدْيَةٌ',
+      explanation: 'ه (ha) et ة (ta marbuta) se ressemblent à l\'écrit mais ont des règles différentes. ة se transforme en "t" quand on ajoute une voyelle après (ex: مَدْرَسَةٌ → مَدْرَسَةُ). ه reste toujours "h". Compare : هِدْيَةٌ (hadiyah, cadeau) vs مَلِكَةٌ (malikah, reine) — les deux se terminent par un "h" à l\'arrêt.',
+    },
   ],
   exerciseWords: [
     { arabic: 'هِدِيَّةٌ', latin: 'hadiya', image: '🎁' },
@@ -761,6 +881,14 @@ export const day23Lesson: DayLesson = {
     { arabic: 'رُورِيَا', trans: 'rouriaa', type: 'Combiné' },
     { arabic: 'رِيرَا', trans: 'riiraa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Le Ra Roulé',
+      description: 'ر (ra) se prononce en faisant vibrer le bout de la langue contre le palais',
+      example: 'رَمْلٌ',
+      explanation: 'La lettre ر (ra) se prononce comme un "r" roulé. Le bout de ta langue vibre juste derrière les dents du haut. Parfois ر est prononcé épais (quand la voyelle est "a" ou "ou"), parfois fin (quand la voyelle est "i"). Compare : رَمَلٌ (ramal) vs رِيمٌ (rim).',
+    },
+  ],
   exerciseWords: [
     { arabic: 'رَمْلٌ', latin: 'raml', image: '🏜️' },
     { arabic: 'رَحِيمٌ', latin: 'rahim', image: '💚' },
@@ -799,6 +927,14 @@ export const day24Lesson: DayLesson = {
     { arabic: 'وَاوِي', trans: 'waawii', type: 'Combiné' },
     { arabic: 'وُوَي', trans: 'wuuwii', type: 'Combiné' },
     { arabic: 'وِيوَا', trans: 'wiiwaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Waw de Prolongation',
+      description: 'و (waw) peut être une consonne ou une lettre de prolongation — tout dépend de sa voyelle !',
+      example: 'وَرْدَةٌ',
+      explanation: 'Quand و a une voyelle (وَ, وُ, وِ), c\'est une consonne qui se prononce "w". Quand و a un soukoun (وْ) et est précédé d\'un "ou" (damma), c\'est une lettre de prolongation. Compare : وَرْدَةٌ (wardah, rose) — le و est une consonne. نُورٌ (nour, lumière) — le و prolonge le "ou".',
+    },
   ],
   exerciseWords: [
     { arabic: 'وَرْدَةٌ', latin: 'wardah', image: '🌹' },
@@ -887,6 +1023,14 @@ export const day26Lesson: DayLesson = {
     { arabic: 'دُودِيَا', trans: 'doudiaa', type: 'Combiné' },
     { arabic: 'دِيدَا', trans: 'diidaa', type: 'Combiné' },
   ],
+  readingRules: [
+    {
+      name: 'Dal et les Sons Dentaux',
+      description: 'د (dal) se prononce avec le bout de la langue contre les dents du haut',
+      example: 'دَرْسٌ',
+      explanation: 'د (dal), ت (ta) et ط (ta emphatique) sont des lettres "dentales" : le bout de la langue touche les dents du haut. Mais elles ne sont pas toutes pareilles ! د est fine et douce, ت est un peu plus forte, et ط est lourde. Entraîne-toi : دَرْسٌ (dars, leçon), تَمْرٌ (tamr, datte), طَعَامٌ (taam, nourriture).',
+    },
+  ],
   exerciseWords: [
     { arabic: 'دَرْسٌ', latin: 'dars', image: '📚' },
     { arabic: 'دَاخِلٌ', latin: 'dakhil', image: '🚪' },
@@ -925,6 +1069,14 @@ export const day27Lesson: DayLesson = {
     { arabic: 'ذَاذِي', trans: 'dhaadhii', type: 'Combiné' },
     { arabic: 'ذُوذِيَا', trans: 'dhouddhiaa', type: 'Combiné' },
     { arabic: 'ذِيذَا', trans: 'dhiidhaa', type: 'Combiné' },
+  ],
+  readingRules: [
+    {
+      name: 'Les Sons Interdentaux',
+      description: 'ذ (dhal), ث (tha) et ظ (za) se prononcent entre les dents',
+      example: 'ذَهَبٌ',
+      explanation: 'ذ (dhal), ث (tha) et ظ (za) sont des lettres "interdentales" : mets le bout de ta langue entre tes dents pour les prononcer ! ذ comme le "th" de "that" en anglais, ث comme le "th" de "think", et ظ est la version lourde de ذ. Avec ذَهَبٌ (dhahab, or), sens ta langue entre tes dents !',
+    },
   ],
   exerciseWords: [
     { arabic: 'ذَهَبٌ', latin: 'dhahab', image: '⚜️' },

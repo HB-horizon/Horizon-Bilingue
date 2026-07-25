@@ -256,6 +256,20 @@ export default function RevisionScreen() {
           </Text>
         </View>
       </Animated.View>
+      
+      {/* SRS Revision Link */}
+      <TouchableOpacity
+        onPress={() => router.push('/revision/srs')}
+        className="mx-6 mb-6 p-4 rounded-2xl flex-row items-center"
+        style={{ backgroundColor: "#1E293B", borderWidth: 1.5, borderColor: "#6366F1" }}
+      >
+        <Text className="text-3xl mr-4">🧠</Text>
+        <View className="flex-1">
+          <Text className="font-bold text-base" style={{ color: "#F1F5F9" }}>Révision intelligente SRS</Text>
+          <Text className="text-xs mt-0.5" style={{ color: "#94A3B8" }}>Algorithme de répétition espacée</Text>
+        </View>
+        <Text className="text-xl" style={{ color: "#6366F1" }}>→</Text>
+      </TouchableOpacity>
     </ScreenContainer>
   );
 }

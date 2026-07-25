@@ -86,6 +86,7 @@ export type LessonStep =
   | 'sounds'
   | 'reading-rules'
   | 'forms'
+  | 'writing'
   | 'elongation'
   | 'exercises'
   | 'game'

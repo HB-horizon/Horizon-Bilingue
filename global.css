@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,6 +7,11 @@
 :root {
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --access-font-family: system-ui, -apple-system, sans-serif;
+  --access-font-size-base: 16px;
+  --access-letter-spacing: 0px;
+  --access-line-height: 1.5;
+  --access-bg: transparent;
 }
 
 html, body, #root {
@@ -19,25 +26,72 @@ html, body, #root {
   box-sizing: border-box;
 }
 
-/* Smooth scrolling */
 ::-webkit-scrollbar {
   width: 0;
   background: transparent;
 }
 
-/* Disable text selection on interactive elements */
 button, [role="button"] {
   -webkit-user-select: none;
   user-select: none;
 }
 
-/* Focus visible for accessibility */
 :focus-visible {
   outline: 2px solid var(--color-primary, #FF6B6B);
   outline-offset: 2px;
 }
 
-/* Smooth transitions on theme change */
 html {
   transition: background-color 0.3s ease;
+}
+
+/* === Accessibility: Font === */
+[data-access-font="lexend"] {
+  --access-font-family: 'Lexend', system-ui, -apple-system, sans-serif;
+}
+[data-access-font="atkinson"] {
+  --access-font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, sans-serif;
+}
+
+/* === Accessibility: Letter Spacing === */
+[data-access-spacing="wide"] {
+  --access-letter-spacing: 0.05em;
+}
+[data-access-spacing="wider"] {
+  --access-letter-spacing: 0.1em;
+}
+
+/* === Accessibility: Line Height === */
+[data-access-lineheight="relaxed"] {
+  --access-line-height: 1.7;
+}
+[data-access-lineheight="loose"] {
+  --access-line-height: 2.0;
+}
+
+/* === Accessibility: Large text === */
+[data-access-large="yes"] {
+  --access-font-size-base: 18px;
+}
+
+/* === Accessibility: Background === */
+[data-access-bg="cream"] {
+  --access-bg: #FEFCF3;
+}
+[data-access-bg="soft-blue"] {
+  --access-bg: #F0F4FF;
+}
+
+[data-access-bg="cream"] body,
+[data-access-bg="soft-blue"] body {
+  background-color: var(--access-bg);
+}
+
+/* === Accessibility: Reduced Motion === */
+[data-access-motion="reduced"] *,
+[data-access-motion="reduced"] *::before,
+[data-access-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
