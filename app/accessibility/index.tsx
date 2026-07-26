@@ -4,6 +4,8 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useAccessibility, type DyslexiaFont, type BgMode, type LetterSpacing, type LineHeight } from "@/lib/accessibility-provider";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useState } from "react";
+import { HamburgerButton } from "@/components/drawer/hamburger-button";
+import { useDrawer } from "@/components/drawer/drawer-provider";
 
 type Option<T> = { label: string; value: T; desc: string };
 
@@ -99,6 +101,7 @@ function ToggleRow({ label, desc, value, onChange }: {
 
 export default function AccessibilityScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const { settings, update, reset } = useAccessibility();
   const [preview, setPreview] = useState(false);
 
@@ -111,14 +114,20 @@ export default function AccessibilityScreen() {
     <ScreenContainer edges={["top", "left", "right", "bottom"]}>
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 20, paddingBottom: 60 }}>
         {/* Header */}
-        <View className="flex-row items-center mb-6">
-          <TouchableOpacity onPress={() => router.back()} className="mr-3 p-2">
-            <Text className="text-xl" style={{ color: "#94A3B8" }}>←</Text>
-          </TouchableOpacity>
-          <View className="flex-1">
-            <Text className="text-sm font-semibold" style={{ color: "#64748B" }}>Accessibilité</Text>
-            <Text className="text-xl font-extrabold" style={{ color: "#F1F5F9" }}>Lecture & Dyslexie</Text>
+        <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center gap-3">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity onPress={() => router.back()} className="p-2">
+              <Text className="text-xl" style={{ color: "#94A3B8" }}>←</Text>
+            </TouchableOpacity>
+            <View>
+              <Text className="text-sm font-semibold" style={{ color: "#64748B" }}>Accessibilité</Text>
+              <Text className="text-xl font-extrabold" style={{ color: "#F1F5F9" }}>Lecture & Dyslexie</Text>
+            </View>
           </View>
+          <TouchableOpacity onPress={() => router.push('/')} className="active:opacity-70 p-2">
+            <Text className="text-xl">🏠</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Intro */}

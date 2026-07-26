@@ -4,11 +4,14 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useProgress } from "@/hooks/use-progress";
 import { useState } from "react";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
+import { HamburgerButton } from "@/components/drawer/hamburger-button";
+import { useDrawer } from "@/components/drawer/drawer-provider";
 
 type Tab = "parents" | "apprenants";
 
 export default function ParentGuideScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const { progress, getProgressPercentage } = useProgress();
   const [activeTab, setActiveTab] = useState<Tab>("parents");
 
@@ -20,11 +23,19 @@ export default function ParentGuideScreen() {
     <ScreenContainer edges={["top", "left", "right", "bottom"]}>
       {/* Header */}
       <View style={{ backgroundColor: "#0F172A" }} className="pt-4 pb-6 px-5">
-        <TouchableOpacity onPress={() => router.back()} className="mb-4 active:opacity-70">
-          <Text style={{ color: "#94A3B8" }} className="text-base">
-            ← Retour
-          </Text>
-        </TouchableOpacity>
+        <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-row items-center gap-3">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity onPress={() => router.back()} className="active:opacity-70">
+              <Text style={{ color: "#94A3B8" }} className="text-sm">
+                ← Retour
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={() => router.push('/')} className="active:opacity-70 p-2">
+            <Text className="text-xl">🏠</Text>
+          </TouchableOpacity>
+        </View>
 
         <Text className="text-3xl font-extrabold text-center mb-1" style={{ color: "#F1F5F9" }}>
           Guide

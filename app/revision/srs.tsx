@@ -1,22 +1,28 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Animated, { FadeIn, SlideInRight, BounceIn } from "react-native-reanimated";
 import { ScreenContainer } from "@/components/screen-container";
 import { getDueSRSItems, reviewSRSItem, getSRSStats, type SRSItem } from "@/lib/srs-manager";
 import { playDecomposedLetterSound, playWordSound } from "@/lib/audio-manager";
-import { isSpeechSupported, speechListen } from "@/lib/speech-recognition";
+import { isSpeechSupported } from "@/lib/speech-recognition";
+import { ListenRepeatButton } from "@/components/common/listen-repeat-button";
+import { HamburgerButton } from "@/components/drawer/hamburger-button";
+import { useDrawer } from "@/components/drawer/drawer-provider";
 
 type ReviewPhase = 'countdown' | 'front' | 'answer' | 'done';
 
 export default function SRSRevisionScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const [items, setItems] = useState<SRSItem[]>([]);
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<ReviewPhase>('countdown');
   const [stats, setStats] = useState({ total: 0, due: 0, mastered: 0, learning: 0 });
   const [loading, setLoading] = useState(true);
   const [speechFeedback, setSpeechFeedback] = useState<'idle' | 'listening' | 'correct' | 'incorrect'>('idle');
+  const [pronunciationScore, setPronunciationScore] = useState<number | null>(null);
+  const hasPlayedAudioRef = useRef(false);
 
   const loadData = useCallback(async () => {
     const due = await getDueSRSItems();
@@ -30,13 +36,30 @@ export default function SRSRevisionScreen() {
   const current = items[index];
   const remaining = items.length - index;
 
-  const handlePlay = async () => {
+  const playCurrentAudio = useCallback(async () => {
     if (!current) return;
     if (current.type === 'letter') {
       await playDecomposedLetterSound(current.text, 'fatha');
     } else {
       await playWordSound(current.text);
     }
+  }, [current]);
+
+  useEffect(() => {
+    if (phase === 'front' && current && !hasPlayedAudioRef.current) {
+      hasPlayedAudioRef.current = true;
+      playCurrentAudio();
+    }
+  }, [phase, current, playCurrentAudio]);
+
+  useEffect(() => {
+    if (phase === 'front') {
+      hasPlayedAudioRef.current = false;
+    }
+  }, [phase]);
+
+  const handleReplayAudio = async () => {
+    await playCurrentAudio();
   };
 
   const handleReveal = () => {
@@ -50,25 +73,20 @@ export default function SRSRevisionScreen() {
       setIndex((i) => i + 1);
       setPhase('front');
       setSpeechFeedback('idle');
+      setPronunciationScore(null);
     } else {
       setPhase('done');
       setStats(await getSRSStats());
     }
   };
 
-  const handleSpeech = async () => {
-    if (!current || speechFeedback !== 'idle') return;
-    setSpeechFeedback('listening');
-    try {
-      const result = await speechListen(current.text, { lang: 'ar' });
-      if (result.isCorrect) {
-        setSpeechFeedback('correct');
-        setTimeout(() => handleGrade(5), 1200);
-      } else {
-        setSpeechFeedback('incorrect');
-      }
-    } catch {
-      setSpeechFeedback('idle');
+  const handleSpeechResult = (result: { isCorrect: boolean; score: number; transcript: string }) => {
+    setPronunciationScore(result.score);
+    if (result.isCorrect) {
+      setSpeechFeedback('correct');
+      setTimeout(() => handleGrade(5), 1500);
+    } else {
+      setSpeechFeedback('incorrect');
     }
   };
 
@@ -135,6 +153,30 @@ export default function SRSRevisionScreen() {
 
   return (
     <ScreenContainer edges={['top', 'left', 'right', 'bottom']}>
+      {/* Header */}
+      <View className="bg-surface border-b border-border px-4 py-3">
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row items-center gap-3">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="active:opacity-70"
+            >
+              <Text className="text-primary text-sm font-bold">← Retour</Text>
+            </TouchableOpacity>
+          </View>
+          <Text className="text-foreground font-bold text-sm">
+            SRS · {index + 1}/{items.length}
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push('/')}
+            className="active:opacity-70 p-2"
+          >
+            <Text className="text-xl">🏠</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 24, alignItems: 'center' }}>
         {/* Header */}
         <View className="w-full mb-6">
@@ -180,44 +222,68 @@ export default function SRSRevisionScreen() {
             </Text>
           ) : null}
 
-          {/* Speech recognition */}
-          {isSpeechSupported() ? (
-            <View className="mt-6 items-center">
-              <TouchableOpacity
-                onPress={handleSpeech}
-                disabled={speechFeedback === 'listening'}
-                className="w-16 h-16 rounded-full items-center justify-center"
-                style={{
-                  backgroundColor: speechFeedback === 'correct' ? '#10B981' : speechFeedback === 'incorrect' ? '#EF4444' : speechFeedback === 'listening' ? '#F59E0B' : '#6366F1',
-                }}
-              >
-                <Text className="text-3xl">
-                  {speechFeedback === 'listening' ? '🎤' : speechFeedback === 'correct' ? '✓' : speechFeedback === 'incorrect' ? '✗' : '🎤'}
+          {/* Listen & Repeat Section */}
+          <View className="mt-6 items-center w-full">
+            {isSpeechSupported() ? (
+              <>
+                <View className="mb-4">
+                  <TouchableOpacity
+                    onPress={handleReplayAudio}
+                    className="px-4 py-2 rounded-xl flex-row items-center gap-2"
+                    style={{ backgroundColor: "#334155" }}
+                  >
+                    <Text className="text-white font-semibold">🔊 Réécouter</Text>
+                  </TouchableOpacity>
+                  <Text className="text-xs mt-1 text-center" style={{ color: "#64748B" }}>
+                    Écoute attentivement, puis répète
+                  </Text>
+                </View>
+
+                <ListenRepeatButton
+                  expectedText={current?.text ?? ''}
+                  onResult={handleSpeechResult}
+                  disabled={speechFeedback === 'listening' || speechFeedback === 'correct'}
+                />
+
+                {pronunciationScore !== null && speechFeedback !== 'idle' && (
+                  <View className="mt-4 items-center">
+                    <Text className="text-sm font-bold" style={{ color: speechFeedback === 'correct' ? '#10B981' : '#EF4444' }}>
+                      Score de prononciation : {pronunciationScore}%
+                    </Text>
+                    <View className="w-full h-2 rounded-full mt-1 overflow-hidden" style={{ backgroundColor: "#334155" }}>
+                      <View
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${pronunciationScore}%`,
+                          backgroundColor: speechFeedback === 'correct' ? '#10B981' : '#EF4444',
+                        }}
+                      />
+                    </View>
+                  </View>
+                )}
+              </>
+            ) : (
+              <View className="items-center gap-3">
+                <TouchableOpacity
+                  onPress={handleReplayAudio}
+                  className="px-6 py-3 rounded-xl flex-row items-center gap-2"
+                  style={{ backgroundColor: "#334155" }}
+                >
+                  <Text className="text-white font-semibold">🔊 Écouter</Text>
+                </TouchableOpacity>
+                <Text className="text-xs text-center" style={{ color: "#64748B" }}>
+                  Reconnaissance vocale non disponible sur cette plateforme
                 </Text>
-              </TouchableOpacity>
-              <Text className="text-xs mt-2" style={{ color: "#94A3B8" }}>
-                {speechFeedback === 'idle' && 'Prononce au micro'}
-                {speechFeedback === 'listening' && 'Écoute...'}
-                {speechFeedback === 'correct' && 'Bravo !'}
-                {speechFeedback === 'incorrect' && 'Essaie encore'}
-              </Text>
-            </View>
-          ) : (
-            <TouchableOpacity
-              onPress={handlePlay}
-              className="mt-6 px-6 py-3 rounded-xl flex-row items-center gap-2"
-              style={{ backgroundColor: "#334155" }}
-            >
-              <Text className="text-white font-semibold">🔊 Écouter</Text>
-            </TouchableOpacity>
-          )}
+              </View>
+            )}
+          </View>
         </Animated.View>
 
         {/* Action buttons */}
         {phase === 'front' ? (
           <Animated.View entering={FadeIn.duration(400)} className="w-full items-center mt-8">
             <TouchableOpacity
-              onPress={() => { handlePlay(); handleReveal(); }}
+              onPress={() => { handleReplayAudio(); handleReveal(); }}
               className="py-3 px-10 rounded-2xl mb-4"
               style={{ backgroundColor: "#FF6B6B" }}
             >

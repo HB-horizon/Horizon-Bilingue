@@ -112,7 +112,7 @@ export function SoundsSection({ sounds, onNext }: SoundsSectionProps) {
                     <Animated.View entering={BounceIn.springify()} className="mt-3">
                       <ListenRepeatButton
                         expectedText={sound.arabic}
-                        onResult={(correct) => handleSpeechResult(index, correct)}
+                        onResult={(result) => handleSpeechResult(index, result.isCorrect)}
                       />
                     </Animated.View>
                   ) : null}

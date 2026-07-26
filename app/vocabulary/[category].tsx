@@ -114,7 +114,7 @@ export default function CategoryScreen() {
       {category === 'noms-divins' && (
         <View className="mx-4 mt-3 mb-2 p-3 rounded-xl" style={{ backgroundColor: '#8B5CF620', borderLeftWidth: 4, borderLeftColor: '#8B5CF6' }}>
           <Text className="text-xs leading-relaxed" style={{ color: '#8B5CF6' }}>
-            Les 103 entrées regroupent les 99 Noms d'Allah (Asma'ul Husna) ainsi que 4 noms divins supplémentaires (اللَّهُ, رَبّ, النَّاصِر, النَّذِير) qui apparaissent avec une fréquence élevée dans le Coran et méritent une entrée dédiée.
+            Les 103 entrées regroupent les 99 Noms d&apos;Allah (Asma&apos;ul Husna) ainsi que 4 noms divins supplémentaires (اللَّهُ, رَبّ, النَّاصِر, النَّذِير) qui apparaissent avec une fréquence élevée dans le Coran et méritent une entrée dédiée.
           </Text>
         </View>
       )}

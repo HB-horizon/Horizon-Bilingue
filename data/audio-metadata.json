@@ -9,7 +9,7 @@
     "mim": { "letter": "م", "name": "Mim", "harakats": { "fatha": "letters/mim_fatha.wav", "damma": "letters/mim_damma.wav", "kasra": "letters/mim_kasra.wav" } },
     "shin": { "letter": "ش", "name": "Shin", "harakats": { "fatha": "letters/shin_fatha.wav", "damma": "letters/shin_damma.wav", "kasra": "letters/shin_kasra.wav" } },
     "jim": { "letter": "ج", "name": "Jim", "harakats": { "fatha": "letters/jim_fatha.wav", "damma": "letters/jim_damma.wav", "kasra": "letters/jim_kasra.wav" } },
-    "ha": { "letter": "ح", "name": "Ha (emphatic)", "harakats": { "fatha": "letters/ha_fatha.wav", "damma": "letters/ha_damma.wav", "kasra": "letters/ha_kasra.wav" } },
+    "ha": { "letter": "ح", "name": "Ha (pharyngeal)", "harakats": { "fatha": "letters/ha_fatha.wav", "damma": "letters/ha_damma.wav", "kasra": "letters/ha_kasra.wav" } },
     "kha": { "letter": "خ", "name": "Kha", "harakats": { "fatha": "letters/kha_fatha.wav", "damma": "letters/kha_damma.wav", "kasra": "letters/kha_kasra.wav" } },
     "sin": { "letter": "س", "name": "Sin", "harakats": { "fatha": "letters/sin_fatha.wav", "damma": "letters/sin_damma.wav", "kasra": "letters/sin_kasra.wav" } },
     "sad": { "letter": "ص", "name": "Sad", "harakats": { "fatha": "letters/sad_fatha.wav", "damma": "letters/sad_damma.wav", "kasra": "letters/sad_kasra.wav" } },
@@ -28,7 +28,8 @@
     "dal": { "letter": "د", "name": "Dal", "harakats": { "fatha": "letters/dal_fatha.wav", "damma": "letters/dal_damma.wav", "kasra": "letters/dal_kasra.wav" } },
     "dhal": { "letter": "ذ", "name": "Dhal", "harakats": { "fatha": "letters/dhal_fatha.wav", "damma": "letters/dhal_damma.wav", "kasra": "letters/dhal_kasra.wav" } },
     "hha": { "letter": "ه", "name": "Ha", "harakats": { "fatha": "letters/hha_fatha.wav", "damma": "letters/hha_damma.wav", "kasra": "letters/hha_kasra.wav" } },
-    "hamza": { "letter": "ء", "name": "Hamza", "harakats": { "fatha": "letters/hamza_fatha.wav", "damma": "letters/hamza_damma.wav", "kasra": "letters/hamza_kasra.wav" } }
+    "hamza": { "letter": "ء", "name": "Hamza", "harakats": { "fatha": "letters/hamza_fatha.wav", "damma": "letters/hamza_damma.wav", "kasra": "letters/hamza_kasra.wav" } },
+    "ta-marbuta": { "letter": "ة", "name": "Ta Marbuta", "harakats": { "fatha": "letters/ta-marbuta_fatha.wav", "damma": "letters/ta-marbuta_damma.wav", "kasra": "letters/ta-marbuta_kasra.wav" } }
   },
   "words": {},
   "feedback": {

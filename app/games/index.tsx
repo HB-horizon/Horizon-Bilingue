@@ -8,6 +8,8 @@ import { SoundMatchingGame } from '@/components/games/sound-matching-game';
 import { useProgress } from '@/hooks/use-progress';
 import { getAllCompletedLetters } from '@/data/all-lessons';
 import Animated, { FadeIn } from 'react-native-reanimated';
+import { HamburgerButton } from '@/components/drawer/hamburger-button';
+import { useDrawer } from '@/components/drawer/drawer-provider';
 
 type GameType = 'menu' | 'memory' | 'quiz' | 'sound-matching';
 
@@ -21,6 +23,7 @@ type GameType = 'menu' | 'memory' | 'quiz' | 'sound-matching';
  */
 export default function GamesScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const { progress } = useProgress();
   const [currentGame, setCurrentGame] = useState<GameType>('menu');
   
@@ -67,14 +70,25 @@ export default function GamesScreen() {
     <ScreenContainer edges={["top", "left", "right", "bottom"]}>
       {/* Barre de navigation */}
       <View className="bg-surface border-b border-border px-4 py-3">
-        <TouchableOpacity
-          onPress={handleBack}
-          className="active:opacity-70"
-        >
-          <Text className="text-primary text-lg font-bold">
-            ← {currentGame === 'menu' ? 'Retour' : 'Menu'}
-          </Text>
-        </TouchableOpacity>
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row items-center gap-3">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity
+              onPress={handleBack}
+              className="active:opacity-70"
+            >
+              <Text className="text-primary text-sm font-bold">
+                ← {currentGame === 'menu' ? 'Retour' : 'Menu'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            onPress={() => router.push('/')}
+            className="active:opacity-70 p-2"
+          >
+            <Text className="text-xl">🏠</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       
       {/* Contenu */}
@@ -91,7 +105,7 @@ export default function GamesScreen() {
                 Mini-Jeux
               </Text>
               <Text className="text-base text-center text-muted">
-                Révise en t'amusant avec {completedLetters.length} lettres apprises !
+                Révise en t&apos;amusant avec {completedLetters.length} lettres apprises !
               </Text>
             </View>
             

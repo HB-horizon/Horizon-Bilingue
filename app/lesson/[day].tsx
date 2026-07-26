@@ -12,8 +12,10 @@ import { useProgress } from '@/hooks/use-progress';
 import { getLessonByDay } from '@/data/all-lessons';
 import { useState, useEffect, useRef } from 'react';
 import { LessonStep } from '@/types/lesson';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import { addItemsToSRS, createSRSItem } from '@/lib/srs-manager';
+import { HamburgerButton } from '@/components/drawer/hamburger-button';
+import { useDrawer } from '@/components/drawer/drawer-provider';
 
 /**
  * Écran de leçon - Orchestrateur de toutes les sections
@@ -30,6 +32,7 @@ import { addItemsToSRS, createSRSItem } from '@/lib/srs-manager';
 export default function LessonScreen() {
   const { day } = useLocalSearchParams<{ day: string }>();
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const { completeDay, startDay, isDayUnlocked, progress, loading: progressLoading } = useProgress();
   
   const dayNumber = parseInt(day || '1', 10);
@@ -138,6 +141,30 @@ export default function LessonScreen() {
   
   return (
     <ScreenContainer edges={['top', 'left', 'right', 'bottom']}>
+      {/* Header */}
+      <View className="bg-surface border-b border-border px-4 py-3">
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row items-center gap-3">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="active:opacity-70"
+            >
+              <Text className="text-primary text-sm font-bold">← Retour</Text>
+            </TouchableOpacity>
+          </View>
+          <Text className="text-foreground font-bold text-sm">
+            Jour {dayNumber}
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push('/')}
+            className="active:opacity-70 p-2"
+          >
+            <Text className="text-xl">🏠</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <ScrollView
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 80 }}
@@ -156,6 +183,13 @@ export default function LessonScreen() {
           <LetterPresentation
             letter={lesson.letter}
             latinName={lesson.latinName}
+            exampleWord={lesson.exampleWord}
+            exampleLatin={lesson.exampleLatin}
+            exampleImage={lesson.exampleImage}
+            storyContent={lesson.storyContent}
+            storyCharacter={lesson.storyCharacter}
+            dayNumber={dayNumber}
+            mnemonicTip={lesson.mnemonicTip}
             onNext={handleNext}
           />
         )}
@@ -185,6 +219,7 @@ export default function LessonScreen() {
           <WritingSection
             letter={lesson.letter}
             latinName={lesson.latinName}
+            forms={lesson.forms}
             onNext={handleNext}
           />
         )}

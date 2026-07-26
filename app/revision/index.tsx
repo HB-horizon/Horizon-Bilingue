@@ -12,6 +12,8 @@ import Animated, {
   withTiming,
   interpolate,
 } from 'react-native-reanimated';
+import { HamburgerButton } from '@/components/drawer/hamburger-button';
+import { useDrawer } from '@/components/drawer/drawer-provider';
 
 /**
  * Écran de Révision - Flashcards
@@ -24,6 +26,7 @@ import Animated, {
  */
 export default function RevisionScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const { progress } = useProgress();
   const [letters, setLetters] = useState<Array<{ letter: string; latinName: string }>>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -132,29 +135,40 @@ export default function RevisionScreen() {
       {/* Barre de navigation */}
       <View className="bg-surface border-b border-border px-4 py-3">
         <View className="flex-row items-center justify-between">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="active:opacity-70"
-          >
-            <Text className="text-primary text-lg font-bold">
-              ← Retour
-            </Text>
-          </TouchableOpacity>
+          <View className="flex-row items-center gap-3">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="active:opacity-70"
+            >
+              <Text className="text-primary text-sm font-bold">
+                ← Retour
+              </Text>
+            </TouchableOpacity>
+          </View>
           
           <Text className="text-foreground font-bold">
             {currentIndex + 1}/{letters.length}
           </Text>
           
-          <TouchableOpacity
-            onPress={toggleRandomMode}
-            className={`px-3 py-1 rounded-full ${
-              isRandom ? 'bg-primary' : 'bg-muted'
-            }`}
-          >
-            <Text className="text-white text-sm font-bold">
-              {isRandom ? '🔀 Aléa' : '➡️ Ordre'}
-            </Text>
-          </TouchableOpacity>
+          <View className="flex-row items-center gap-2">
+            <TouchableOpacity
+              onPress={toggleRandomMode}
+              className={`px-3 py-1 rounded-full ${
+                isRandom ? 'bg-primary' : 'bg-muted'
+              }`}
+            >
+              <Text className="text-white text-sm font-bold">
+                {isRandom ? '🔀 Aléa' : '➡️ Ordre'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push('/')}
+              className="active:opacity-70 p-2"
+            >
+              <Text className="text-xl">🏠</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       

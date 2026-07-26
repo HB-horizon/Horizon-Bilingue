@@ -86,7 +86,7 @@ export function ExerciseSection({ words, onNext }: ExerciseSectionProps) {
                     <Animated.View entering={BounceIn.springify()} className="mt-3">
                       <ListenRepeatButton
                         expectedText={word.arabic}
-                        onResult={(correct) => handleSpeechResult(index, correct)}
+                        onResult={(result) => handleSpeechResult(index, result.isCorrect)}
                       />
                     </Animated.View>
                   ) : null}

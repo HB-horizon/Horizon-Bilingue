@@ -6,9 +6,12 @@ import { useEffect, useState, useCallback } from "react";
 import { rewardsManager } from "@/lib/rewards-manager";
 import { UserRewards, PREDEFINED_BADGES } from "@/types/rewards";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { HamburgerButton } from "@/components/drawer/hamburger-button";
+import { useDrawer } from "@/components/drawer/drawer-provider";
 
 export default function RewardsScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const [rewards, setRewards] = useState<UserRewards | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -43,9 +46,17 @@ export default function RewardsScreen() {
     <ScreenContainer edges={["top", "left", "right"]}>
       {/* Header */}
       <View style={{ backgroundColor: "#0F172A" }} className="px-5 pt-4 pb-6">
-        <TouchableOpacity onPress={() => router.back()} className="mb-4 active:opacity-70">
-          <Text style={{ color: "#94A3B8" }} className="text-base">← Retour</Text>
-        </TouchableOpacity>
+        <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-row items-center gap-3">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity onPress={() => router.back()} className="active:opacity-70">
+              <Text style={{ color: "#94A3B8" }} className="text-sm">← Retour</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity onPress={() => router.push('/')} className="active:opacity-70 p-2">
+            <Text className="text-xl">🏠</Text>
+          </TouchableOpacity>
+        </View>
         <Text className="text-2xl font-extrabold text-center mb-1" style={{ color: "#F1F5F9" }}>
           🏆 Mes Récompenses
         </Text>

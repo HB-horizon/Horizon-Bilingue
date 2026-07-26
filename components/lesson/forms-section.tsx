@@ -74,7 +74,7 @@ export function FormsSection({ forms, onNext }: FormsSectionProps) {
           className="bg-[#FFE66D]/20 p-4 rounded-xl border-2 border-[#FFD700] mb-4"
         >
           <Text className="text-center text-foreground leading-relaxed">
-            💡 En arabe, les lettres se connectent entre elles. C'est pourquoi chaque lettre a plusieurs formes !
+            💡 En arabe, les lettres se connectent entre elles. C&apos;est pourquoi chaque lettre a plusieurs formes !
           </Text>
         </Animated.View>
       </ScrollView>

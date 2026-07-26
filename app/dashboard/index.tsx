@@ -18,11 +18,14 @@ import Animated, {
   withSequence,
   Easing,
 } from "react-native-reanimated";
+import { HamburgerButton } from "@/components/drawer/hamburger-button";
+import { useDrawer } from "@/components/drawer/drawer-provider";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function DashboardScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const { progress, loading, isDayUnlocked, getProgressPercentage, reload } = useProgress();
   const [srsDueCount, setSrsDueCount] = useState(0);
   const progressAnim = useSharedValue(0);
@@ -88,6 +91,16 @@ export default function DashboardScreen() {
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 220 }}>
         {/* Header */}
         <View style={{ backgroundColor: "#0F172A" }} className="px-5 pt-6 pb-8">
+          {/* Hamburger menu */}
+          <View className="flex-row justify-between items-center mb-4">
+            <HamburgerButton onPress={openDrawer} />
+            <TouchableOpacity
+              onPress={() => router.push('/')}
+              className="active:opacity-70 p-2"
+            >
+              <Text className="text-xl">🏠</Text>
+            </TouchableOpacity>
+          </View>
           <Animated.Text
             entering={FadeInDown.duration(400).springify()}
             className="text-2xl font-extrabold text-center mb-1"

@@ -3,6 +3,8 @@ import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useEffect, useRef, useState } from "react";
 import { loadProgress } from "@/lib/progress-manager";
+import { HamburgerButton } from "@/components/drawer/hamburger-button";
+import { useDrawer } from "@/components/drawer/drawer-provider";
 
 const STARS = Array.from({ length: 40 }, (_, i) =>
   ({
@@ -17,6 +19,7 @@ const STARS = Array.from({ length: 40 }, (_, i) =>
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
   const [nextDay, setNextDay] = useState(1);
 
   const logoScale = useRef(new Animated.Value(0.6)).current;
@@ -110,6 +113,11 @@ export default function HomeScreen() {
     >
       {/* Gradient overlay */}
       <View className="absolute inset-0" style={{ backgroundColor: "rgba(15,23,42,0.3)" }} />
+
+      {/* Hamburger menu - top left */}
+      <View className="absolute top-12 left-4 z-10">
+        <HamburgerButton onPress={openDrawer} />
+      </View>
 
       {/* Decorative geometric pattern - top right */}
       <View className="absolute top-0 right-0 w-48 h-48 opacity-10">

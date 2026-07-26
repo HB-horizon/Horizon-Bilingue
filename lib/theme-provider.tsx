@@ -15,7 +15,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [colorScheme, setColorSchemeState] = useState<ColorScheme>("light");
 
   useEffect(() => {
-    const systemScheme = Appearance?.colorScheme ?? "light";
+    const systemScheme = Appearance.getColorScheme?.() ?? "light";
     if (systemScheme !== "light") {
       setColorSchemeState(systemScheme as ColorScheme);
     }

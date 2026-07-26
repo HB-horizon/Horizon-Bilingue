@@ -3,9 +3,12 @@ import { useRouter } from 'expo-router';
 import { ScreenContainer } from '@/components/screen-container';
 import { vocabularyCategories, getWordsByCategory } from '@/data/quran-vocabulary';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { HamburgerButton } from '@/components/drawer/hamburger-button';
+import { useDrawer } from '@/components/drawer/drawer-provider';
 
 export default function VocabularyScreen() {
   const router = useRouter();
+  const { openDrawer } = useDrawer();
 
   const totalWords = vocabularyCategories.reduce(
     (sum, cat) => sum + getWordsByCategory(cat.id).length, 0
@@ -16,9 +19,12 @@ export default function VocabularyScreen() {
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }}>
         <View className="bg-surface border-b border-border px-4 py-4">
           <View className="flex-row items-center justify-between">
-            <TouchableOpacity onPress={() => router.back()} className="active:opacity-70">
-              <Text className="text-primary text-lg font-bold">← Retour</Text>
-            </TouchableOpacity>
+            <View className="flex-row items-center gap-3">
+              <HamburgerButton onPress={openDrawer} />
+              <TouchableOpacity onPress={() => router.back()} className="active:opacity-70">
+                <Text className="text-primary text-sm font-bold">← Retour</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity onPress={() => router.push('/')} className="active:opacity-70 p-2">
               <Text className="text-xl">🏠</Text>
             </TouchableOpacity>
